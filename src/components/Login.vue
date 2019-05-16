@@ -7,8 +7,8 @@
                         <div slot="header" class="clearfix">
                             <span>欢迎登陆</span>
                         </div>
+
                         <div class="text item">
-                           
                             <el-form-item label="用户名" prop="name">
                             <el-input v-model="user.name"></el-input>
                             </el-form-item>
@@ -19,6 +19,7 @@
                                     <el-button type="primary" icon="el-icon-upload" @click="login">登录</el-button>
                             </el-form-item>
                         </div>
+                        
                     </el-card>
                 </div>
             </el-form>
@@ -80,7 +81,7 @@
             },
             setCookie(c_name, c_pwd, exdays) {
                 var exdate = new Date(); //获取时间
-                exdate.setTime(exdate.getTime() + 60 * 60 * 1000 * exdays); //保存的天数
+                exdate.setTime(exdate.getTime() + 60 * 60 * 1000 * exdays); //保存的小时
                 //字符串拼接cookie
                 window.document.cookie = "userName" + "=" + c_name + ";path=/;expires=" + exdate.toGMTString();
                 window.document.cookie = "userPwd" + "=" + c_pwd + ";path=/;expires=" + exdate.toGMTString();

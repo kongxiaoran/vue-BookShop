@@ -50,7 +50,7 @@
         },
 
         created:function(){
-            alert("navMenu");
+           
         },
         methods: {
             handleOpen(key, keyPath) {

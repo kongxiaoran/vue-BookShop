@@ -128,7 +128,6 @@ export default {
     created: function(){
       this.getPackData();
       this.total=this.tableData.length;
-      alert("bookstable");
     },
 
     methods: {

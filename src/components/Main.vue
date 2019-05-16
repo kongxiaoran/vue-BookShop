@@ -38,7 +38,7 @@
     export default {
         
         created:function(){
-           alert("main");
+           
         },
         methods: {
             login () {

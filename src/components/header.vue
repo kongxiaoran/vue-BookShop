@@ -20,7 +20,6 @@
         },
         created:function(){
             this.username=this.getUserName();
-            alert(this.username);
         },
         methods: {
             login () {
