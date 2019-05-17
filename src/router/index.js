@@ -4,6 +4,7 @@ import Main from '@/components/Main.vue'
 import Login from '@/components/Login.vue'
 import BooksTable from '@/components/view/BooksTable.vue'
 import DataTable from '@/components/DataTable.vue'
+import createBook from '@/components/view/createBook.vue'
 import DataTable1 from '@/components/DataTable1.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import { Breadcrumb } from 'element-ui';
@@ -35,7 +36,7 @@ export default new Router({
       component: Main,
       children:[
         {path: '/editBook',name: '编辑图书',component: BooksTable },
-        {path: '/createBook',name: '新建图书',component: DataTable}
+        {path: '/createBook',name: '新建图书',component: createBook}
       ],
     },
     {
