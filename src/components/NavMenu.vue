@@ -43,8 +43,8 @@
                 isCollapse: true,
                 navList:[
                     {name:'',navItem:'图书',
-                        second:[{name:'/communityActivity',navItem:'添加图书'},
-                                {name:'/bookstable',navItem:'删除图书'}]}
+                        second:[{name:'/editBook',navItem:'编辑图书'},
+                                {name:'/createbook',navItem:'新建图书'}]}
                 ]
             };
         },

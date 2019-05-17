@@ -57,27 +57,59 @@
           </span>
         </el-dialog>
 
+        <!-- 编辑页面 -->
         <el-dialog title="编辑" :visible.sync="editFormVisible"  :close-on-click-modal="false">
         <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="editForm.name" auto-complete="off"></el-input>
+          <el-form-item label="书号" prop="bookNumber">
+            <el-input v-model="editForm.bookNumber" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="性别">
-            <el-radio-group v-model="editForm.sex">
-              <el-radio class="radio" :label="1">男</el-radio>
-              <el-radio class="radio" :label="0">女</el-radio>
-            </el-radio-group>
+          <el-form-item label="书名" prop="bookName">
+            <el-input v-model="editForm.bookName" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="年龄">
-            <el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+
+          <el-form-item label="作者名" prop="author">
+            <el-input v-model="editForm.author" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="生日">
-            <el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+
+          <el-form-item label="出版社">
+            <el-select clearable size='mini' v-model="editForm.bookType" placeholder="出版社" autocomplete="off"
+                     style="width: 40%">
+            <el-option v-for="item in publishingHourseList" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="地址">
-            <el-input type="textarea" v-model="editForm.addr"></el-input>
+          
+          <el-form-item label="出版日期">
+            <el-date-picker type="date" placeholder="选择日期" v-model="editForm.publishingDate" 
+              value-format=" yyyy-MM-dd" format="yyyy-MM-dd "></el-date-picker>
           </el-form-item>
+
+          <el-form-item label="价格">
+            <el-input-number v-model="editForm.price" :min="0" :max="400"></el-input-number>
+          </el-form-item>
+
+          <el-form-item label="图书分区" prop="location">
+            <el-input v-model="editForm.location" auto-complete="off"></el-input>
+          </el-form-item>
+
+          <el-form-item label="书籍类别">
+            <el-select clearable size='mini' v-model="editForm.bookType" placeholder="书籍类别" autocomplete="off"
+                     style="width: 50%">
+            <el-option v-for="item in TypeList" :key="item.key" :label="item.label"
+                       :value="item.key"></el-option>
+            </el-select>
+          </el-form-item>
+          
+          <el-form-item label="图书简介">
+            <el-input type="textarea" v-model="editForm.context"></el-input>
+          </el-form-item>
+
+          <el-form-item label="图书图片地址">
+            <el-input v-model="editForm.imgsrc"></el-input>
+          </el-form-item>
+
         </el-form>
+
         <div slot="footer" class="dialog-footer">
           <el-button @click.native="editFormVisible = false">取消</el-button>
           <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
@@ -97,28 +129,57 @@ export default {
                 delVisible:false,    //提示删除框的状态
                 currentPage: 1,
 　　　　　　　　　pageSize: 5,
-                editBook:{
-                    'sid':'','sname':'','sage':''
-                },
+                
                 msg:"",//记录每一条的信息，便于取id
                 delarr:[],//存放删除的数据
                 tableData: [],
                 multipleSelection: [],
                 editFormVisible: false,//编辑界面是否显示
+
+                //图书类别表
+                TypeList:[
+                  {
+                    key:'新书',
+                    label:'新书'
+                  },{
+                    key:'精品',
+                    label:'精品'
+                  },{
+                    key:'普通',
+                    label:'普通'
+                  },
+                ],
+                publishingHourseList:[
+                   {
+                    key:'清华大学出版社',
+                    label:'清华大学出版社'
+                  },{
+                    key:'北京师范大学出版社',
+                    label:'北京师范大学出版社'
+                  },{
+                    key:'中国科学技术大学出版社',
+                    label:'中国科学技术大学出版社'
+                  },
+                ],
                 //编辑界面数据
                 editForm: {
-                  id: 0,
-                  name: '',
-                  sex: -1,
-                  age: 0,
-                  birth: '',
-                  addr: ''
+                  bookNumber:'',
+                  bookName: '',
+                  author:'',
+                  publishingHourse:'',
+                  publishingDate: '',
+                  price: '',
+                  location:'',
+                  bookType:'',
+                  context:'',
+                  imgsrc:'',
                 },
+                editLoading:false,
 
                 //编辑表单验证
                 editFormRules: {
-                  name: [
-                    { required: true, message: '请输入姓名', trigger: 'blur' }
+                  bookNumber: [
+                    { required: true, message: '请输入图书编号', trigger: 'blur' }
                   ]
                 },
         
@@ -130,6 +191,10 @@ export default {
       this.total=this.tableData.length;
     },
 
+    mounted() {
+			this.getPackData();
+    },
+    
     methods: {
 
       getPackData() {
@@ -203,9 +268,42 @@ export default {
       //显示编辑界面   Object.assign({}, row) 浅拷贝、对象属性的合并
       handleEdit: function (index, row) {
 				this.editFormVisible = true;
-				// this.editForm = Object.assign({}, row);
-			},
+				this.editForm = Object.assign({}, row);
+      },
 
+      editBook:function(para){
+        
+        this.$axios.post('/editBook',para).then((res) => {
+            if(res.data==true){
+              this.$message.success('提交成功');
+            }
+
+            this.$refs['editForm'].resetFields();
+            this.editFormVisible = false;
+            this.getPackData();
+            this.editLoading = false;
+                
+          }).catch(function(error){
+                console.log(error);
+       })
+      },
+
+      editSubmit:function(){
+        this.$refs.editForm.validate((valid) => {
+					if (valid) {
+						this.$confirm('确认提交吗？', '提示', {}).then(() => {
+							this.editLoading = true;
+              //NProgress.start();
+              
+							let para = Object.assign({}, this.editForm);
+              
+							// para.publishingDate = (!para.publishingDate || para.publishingDate == '') ? '':util.formatDate.format(new Date(para.publishingDate), 'yyyy-MM-dd');
+              this.editBook(para);
+						});
+					}
+				});
+      }
+      
     },
 
 } 

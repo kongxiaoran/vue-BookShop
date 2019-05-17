@@ -34,8 +34,8 @@ export default new Router({
       name: '图书',
       component: Main,
       children:[
-        {path: '/communityActivity',name: '添加图书',component: BooksTable },
-        {path: '/bookstable',name: '删除图书',component: DataTable}
+        {path: '/editBook',name: '编辑图书',component: BooksTable },
+        {path: '/createBook',name: '新建图书',component: DataTable}
       ],
     },
     {
