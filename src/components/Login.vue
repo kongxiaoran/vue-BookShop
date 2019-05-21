@@ -106,7 +106,7 @@
     .loginPage{
         width: 100%;
         height: 100%;
-        background-image: url("../assets/bg1.jpg");
+        background-image: url("/static/bg1.jpg");
         background-size: 100% 100%;
         background-position: center;
         position: fixed;

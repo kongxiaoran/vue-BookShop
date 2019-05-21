@@ -1,5 +1,10 @@
 <template>
     <div id="booksTable">
+
+      <el-col :span="5">
+        <el-input v-model="findByName"  placeholder="请输入搜索内容" ></el-input>
+      </el-col>
+        <el-button  @click="findByNameButton" icon="el-icon-search">搜索</el-button>
         <el-table ref="multipleTable" :data="tableData.slice((currentPage-1)*pageSize,currentPage*pageSize)" border style="width: 100%" 
             @selection-change="handleSelectionChange" @expand-change="expandChange" :cell-style="cellStyle" :header-cell-style="rowClass">
 
@@ -9,7 +14,7 @@
                 <el-form label-position="left"  inline class="demo-table-expand">
                   <el-form-item>
                     <span>
-                      <img :src="props.row.imgsrc" style="width: auto; height:auto; max-width:80%; max-height:80%; float:left"/>
+                      <img :src="props.row.imgsrc" style="width:140px;height:160px;float:left"/>
                       <div style="float:right">
                         {{props.row.context}}
                       </div>
@@ -135,7 +140,7 @@ export default {
                 tableData: [],
                 multipleSelection: [],
                 editFormVisible: false,//编辑界面是否显示
-
+                findByName:'', //模糊查询的书名
                 //图书类别表
                 TypeList:[
                   {
@@ -197,6 +202,19 @@ export default {
     
     methods: {
 
+      findByNameButton(){
+         this.$axios.get('/findBookByName',{
+           params: { bookName: this.findByName },
+           headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'}}).then((res) => {
+           
+              
+              this.tableData = res.data;
+              // alert(JSON.stringify(res.data));
+              this.total=this.tableData.length;
+              
+          }).catch(function(error){
+                console.log(error);
+      })},
       getPackData() {
          this.$axios.post('/getAllBook').then((res) => {
            
